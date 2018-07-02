@@ -1,16 +1,20 @@
-# Spring PetClinic Sample Application [![Build Status](https://travis-ci.org/spring-projects/spring-petclinic.png?branch=master)](https://travis-ci.org/spring-projects/spring-petclinic/)
+# Spring PetClinic Sample Application [![](https://dockerbuildbadges.quelltext.eu/status.svg?organization=tjwatson&repository=spring-petclinic)](https://hub.docker.com/r/tjwatson/spring-petclinic/builds/)  
+
 
 ## Understanding the Spring Petclinic application with a few diagrams
 <a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
 
 ## Running petclinic locally
 ```
-	git clone https://github.com/spring-projects/spring-petclinic.git
+	git clone https://github.com/tjwatson/spring-petclinic.git
 	cd spring-petclinic
-	./mvnw spring-boot:run
+	./hooks/build
+        docker run --name petclinic -p 9080:9080 -it tjwatson/spring-petclinic
 ```
 
-You can then access petclinic here: http://localhost:8080/
+You can then access petclinic here: http://localhost:9080/
+
+Notice that this is now running with Open-Liberty (https://openliberty.io/)
 
 <img width="1042" alt="petclinic-screenshot" src="https://cloud.githubusercontent.com/assets/838318/19727082/2aee6d6c-9b8e-11e6-81fe-e889a5ddfded.png">
 
