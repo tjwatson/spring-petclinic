@@ -1,0 +1,26 @@
+FROM icr.io/appcafe/open-liberty:full-java21-openj9-ubi-minimal as staging
+
+ARG JAR_FILE=target/*.jar
+COPY --chown=1001:0 $JAR_FILE /staging/app.jar
+
+RUN springBootUtility thin \
+ --sourceAppPath=/staging/app.jar \
+ --targetThinAppPath=/staging/thin-app.jar \
+ --targetLibCachePath=/staging/lib.index.cache
+
+FROM icr.io/appcafe/open-liberty:kernel-slim-java21-openj9-ubi-minimal
+
+RUN cp /opt/ol/wlp/templates/servers/springBoot3/server.xml /config/server.xml
+
+COPY src/main/liberty/config/crac.xml /config/configDropins/defaults
+
+env VERBOSE=true
+RUN features.sh
+
+COPY --chown=1001:0 --from=staging /staging/lib.index.cache /lib.index.cache
+COPY --chown=1001:0 --from=staging /staging/thin-app.jar \
+                    /config/dropins/spring/thin-app.jar
+
+RUN configure.sh
+
+

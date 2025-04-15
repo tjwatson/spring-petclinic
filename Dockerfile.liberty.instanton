@@ -1,0 +1,4 @@
+FROM libertyio/petclinic-og
+
+RUN checkpoint.sh afterAppStart
+

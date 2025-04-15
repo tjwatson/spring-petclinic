@@ -1,0 +1,18 @@
+FROM docker.io/library/eclipse-temurin:21 AS staging
+USER root
+
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+run mkdir /dependency && cd dependency && jar -xf ../app.jar 
+
+FROM docker.io/library/eclipse-temurin:21
+
+USER root
+RUN useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default
+
+USER 1001:0
+
+COPY --chown=1001:0 --from=staging /dependency/BOOT-INF/lib /app/lib
+COPY --chown=1001:0 --from=staging /dependency/META-INF /app/META-INF
+COPY --chown=1001:0 --from=staging /dependency/BOOT-INF/classes /app
+ENTRYPOINT ["java","-cp","app:app/lib/*","org.springframework.samples.petclinic.PetClinicApplication"]

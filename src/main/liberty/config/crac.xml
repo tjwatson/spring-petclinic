@@ -1,0 +1,8 @@
+<server description="new server">
+
+    <featureManager>
+        <feature>crac-1.4</feature>
+    </featureManager>
+
+</server>
+
